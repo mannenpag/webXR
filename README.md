@@ -2,7 +2,7 @@
 
 ## To acces the projects on github pages
 
-[Access 01](https://mannenpag.github.io/webXR/01)
+[01](https://mannenpag.github.io/webXR/01)
 
 2020 Gustav Bodin
 
