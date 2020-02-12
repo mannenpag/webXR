@@ -8,8 +8,14 @@
   </head>
   <body>
     <a-scene background="color: #FAFAFA">
+      <a-assets>
+        <!-- http://www.seaview360.com/ -->
+        <img id="sky" src="sky.jpg">
+      </a-assets>
+      <a-camera position="0 1 0"></a-camera>
       <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box>
       <a-box position="-3.62073 0.75639 -6.42077" rotation="-12.61 19.470000000000002 0" color="#4CC3D9" shadow="" material="" geometry="depth: 4.84" visible=""></a-box>
+      <a-sky src="#sky"></a-sky>
     </a-scene>
   </body>
 </html>
