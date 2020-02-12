@@ -7,37 +7,69 @@
     <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
   </head>
   <script>
-	AFRAME.registerComponent('test', {
+	// AFRAME.registerComponent('test', {
+	// 	schema: {
+	// 		width: {type: 'number', default: 1},
+	// 		height: {type: 'number', default: 1},
+	// 		depth: {type: 'number', default: 1},
+	// 		color: {type: 'color', default: '#AAA'}
+	// 	},
+	// 	init: function () {
+	// 		let data = this.data;
+	// 		let el = this.el;	
+
+	// 		this.geometry = new THREE.BoxBufferGeometry(data.width, data.height, data.depth);
+	// 		this.material = new THREE.MeshStandardMaterial({color: data.color});
+	// 		this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+	// 		console.log("Loaded");
+	// 	},
+
+	// 	animate: function() {
+	// 		let data = this.data;
+	// 		let el = this.el;
+	// 		el.setObject3D('mesh', this.mesh);
+	// 		el.object3D.rotation.set(
+	// 		THREE.Math.degToRad(90),
+	// 		THREE.Math.degToRad(15),
+	// 		THREE.Math.degToRad(30)
+	// 		);
+	// 		el.object3D.rotation.x += Math.PI;
+	// 	},
+
+	// 	tick: function(time, timeDelta) {
+	// 		this.animate();
+	// 	}
+	// })
+	AFRAME.registerComponent('rotateAnimation', {
 		schema: {
-			width: {type: 'number', default: 1},
-			height: {type: 'number', default: 1},
-			depth: {type: 'number', default: 1},
-			color: {type: 'color', default: '#AAA'}
+			type: '';
 		},
 		init: function () {
 			let data = this.data;
-			let el = this.el;		
+			let el = this.el;	
+
 			this.geometry = new THREE.BoxBufferGeometry(data.width, data.height, data.depth);
-
-			// Create material.
 			this.material = new THREE.MeshStandardMaterial({color: data.color});
-
-			// Create mesh.
 			this.mesh = new THREE.Mesh(this.geometry, this.material);
 
-			// Set mesh on entity.
+			console.log("Loaded");
+		},
+
+		animate: function() {
+			let data = this.data;
+			let el = this.el;
 			el.setObject3D('mesh', this.mesh);
 			el.object3D.rotation.set(
+			THREE.Math.degToRad(90),
 			THREE.Math.degToRad(15),
-			THREE.Math.degToRad(30),
-			THREE.Math.degToRad(90)
+			THREE.Math.degToRad(30)
 			);
 			el.object3D.rotation.x += Math.PI;
+		},
 
-			// With .setAttribute (less recommended).
-			// el.setAttribute('rotation', {x: 15, y: 30, z: 90});
-
-			console.log("here is fish");
+		tick: function(time, timeDelta) {
+			this.animate();
 		}
 	})
 </script>
@@ -53,7 +85,7 @@
       <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      <a-camera position="0 1 0"></a-camera>
       <a-entity position="0 0 -5" gltf-model="#fish"></a-entity>
 	  <a-entity test="width: 1; height: 1; depth: 1; color: orange"
-	  position="0 0 0"></a-entity>
+	  position="0 5 -5"></a-entity>
 	  <a-sky src="#sky"></a-sky>
     </a-scene>
   </body>
