@@ -34,28 +34,78 @@
 		}
 	})
 
+	AFRAME.registerComponent('set-sound', {
+		init: function() {
+			let el = this.el;
+			let floorEl = document.querySelector('#floor');
+			let coinEl = document.querySelectorAll('.coin');
+			el.setAttribute('sound', {
+				volume: 0,
+			})
+			floorEl.addEventListener('collide', function (e) {
+				el.setAttribute('sound', {
+					volume: 1
+				})
+			});
+		},
+
+		// update: function() {
+		// 	let el = this.el;
+		// 	let floorEl = document.querySelector('#floor');
+		// 	let coinEl = document.querySelectorAll('.coin');
+		// 	floorEl.addEventListener('collide', function (e) {
+		// 		console.log("LANDED")
+		// 		el.setAttribute('sound', {
+		// 			volume: 1
+		// 		})
+		// 	});
+		// }
+	})
+
 	AFRAME.registerComponent('set-mass', {
 		schema: {
-			rotSpeed: {type: 'number', default: .1},
+			rotSpeed: {type: 'number', default: 2},
 		},
 
 		init: function () {
 			let el = this.el;
 			let floorEl = document.querySelector('#floor');
+
 			el.setAttribute('dynamic-body', {
 				shape: 'auto',
 				mass: 3.5,
 				linearDamping: 0,
 			});
-			el.addEventListener('collide', function (e) {
-				// console.log('Colided' + e.detail.body.id);				
-				e.detail.target.el;  // Original entity (playerEl).
-				e.detail.body.el;    // Other entity, which playerEl touched.
-				e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
-				e.detail.contact.ni; // Normal (direction) of the collision (CANNON.Vec3).
-
-			});
 		},
+		//Update the positon so that the coins falls again
+
+
+		// update: function(oldDate) {
+		// 	let el = this.el;
+		// 	let floorEl = document.querySelector('#floor');
+
+		// 	let reset = {
+		// 		x: {type: 'number', default: Math.random() * 10 - 5},
+		// 		y: {type: 'number', default: Math.random() * 50 + 2},
+		// 		z: {type: 'number', default: Math.random() * -10}
+		// 	}
+			
+		// 	el.addEventListener('collide', function (e) {
+		// 		// console.log('Colided' + e.detail.body.id);				
+		// 		setTimeout(reset, 3000)
+		// 		e.detail.target.el;  // Original entity (playerEl).
+		// 	});
+		// },
+
+		// reset: function() {
+		// 	let el = this.el;
+		// 	let data = this.data;
+		// 	this.el.setAttribute('position', {
+		// 		x: rotation.x + data.rotSpeed,
+		// 		y: rotation.y + data.rotSpeed,
+		// 		z: rotation.z + data.rotSpeed,
+		// 	})
+		// },
 
 		animate: function() {
 			let data = this.data;
@@ -78,31 +128,43 @@
   <body>
     <a-scene background="color: #fefefe">
       <a-assets>
-       		<img id="ground" src="marble.jpg">
+			   <img id="ground" src="marble.jpg">
+			   <audio id="coins" crossorigin="anonymous" preload="auto" src="coins.wav"></audio>
 		  	<a-asset-item id="coin" src="model/scene.gltf"></a-asset-item>
       </a-assets>
       <a-light type="point" color="#fffff" position="0 11.4577 -10.71189" angle="-60" light="color: #fffff2; angle: 60; intensity: 1.58; castShadow: true" scale="4.94 3.3 8.44"></a-light>
-	  <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      
+	  <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>   
+	  <a-sound set-sound src="#coins" autoplay="true" loop="false" positional="false"></a-sound>   
 	  <a-camera position="0 10 5"><a-cursor></a-cursor></a-camera>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
-		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity class="coin" gltf-model="#coin" set-mass random-pos></a-entity>
 	  <a-plane id='floor' collidingEntity static-body position="0 0 0" rotation="-90 0 0" width="30" height="30" src="#ground" ></a-plane>
 	</a-scene>
   </body>
