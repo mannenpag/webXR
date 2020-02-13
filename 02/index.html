@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Raining Gold</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+	<script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+	<script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.13.1/dist/aframe-extras.min.js"></script>
+  </head>
+  <script>
+	AFRAME.registerComponent('set-mass', {
+		schema: {
+		},
+
+		init: function () {
+			let el = this.el;
+			el.setAttribute('dynamic-body', {
+				shape: 'box',
+				mass: 1.5,
+				linearDamping: 0,
+			});
+			el.addEventListener('physicscollided', function (event) {
+				console.log('Entity collided with', event.detail.collidingEntity);
+			});
+		},
+		animate: function(time) {
+			let data = this.data;
+			let el = this.el;
+			let rotation = this.el.object3D.rotation;
+			this.el.setAttribute('rotation', {
+				x: rotation.x + 0.01 * time,
+				y: rotation.y + 0.01 * time,
+				z: rotation.z + 0.01 * time,
+			})
+		},
+
+		tick: function(time, timeDelta) {
+			this.animate(time);
+		}
+	})
+</script>
+  <body>
+    <a-scene background="color: #fefefe">
+      <a-assets>
+        <!-- http://www.seaview360.com/ -->
+        <a-asset-item id="coin" src="model/scene.gltf"></a-asset-item>
+      </a-assets>
+      <a-light type="point" color="#fffff" position="0 11.4577 -10.71189" angle="-60" light="color: #fffff2; angle: 60; intensity: 1.58; castShadow: true" scale="4.94 3.3 8.44"></a-light>
+      <!-- <a-sphere position="0 10 -7"></a-sphere> -->
+	  <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      
+	  <a-camera position="0 1 5"><a-cursor></a-cursor></a-camera>
+      <a-entity  
+				position="0 10 -5" 
+				gltf-model="#coin" 
+				set-mass
+				></a-entity>
+	  <a-entity test="width: 1; height: 1; depth: 1; color: orange"
+	  position="0 5 -5"></a-entity>
+	  <a-plane collidingEntity static-body position="0 0 0" rotation="-90 0 0" width="30" height="30" color="black" material="transparent: true; opacity: 0.2"></a-plane>
+	</a-scene>
+  </body>
+</html>
