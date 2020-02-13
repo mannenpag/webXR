@@ -8,4 +8,4 @@
 
 Academy of Art University 
 
-Instructor [Mark Heller](https://github.com/mheller)
+Instructor [Mark Hellar](https://github.com/mhellar)
