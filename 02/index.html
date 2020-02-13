@@ -9,12 +9,6 @@
   </head>
   <script>
 
-	let randomNum = function () {
-		return Math.random() * 10 - 5;
-	}
-
-	console.log(randomNum());
-
 	AFRAME.registerComponent('random-pos', {
 		schema: {
 			x: {type: 'number', default: Math.random() * 10 - 5},
@@ -31,7 +25,30 @@
 				y: this.data.y,
 				z: this.data.z
 			})
-		}
+		},
+
+		// update: function(oldDate) {
+		// 	let el = this.el;
+		// 	let floorEl = document.querySelector('#floor');
+			
+		// 	floorEl.addEventListener('collide', function (e) {
+		// 		console.log('Colided' + e.detail.body.id);				
+		// 		setTimeout(reset, 10000);
+		// 		e.detail.target.el;  // Original entity (playerEl).
+		// 	});
+		// },
+
+		// reset: function() {
+		// 	// console.log("Reset")
+		// 	let el = this.el;
+		// 	let data = this.data;
+		// 	this.el.setAttribute('position', {
+		// 		x: {type: 'number', default: Math.random() * 10 - 5},
+		// 		y: {type: 'number', default: Math.random() * 50 + 2},
+		// 		z: {type: 'number', default: Math.random() * -10}
+		// 	})
+		// }
+
 	})
 
 	AFRAME.registerComponent('set-sound', {
@@ -65,35 +82,6 @@
 				linearDamping: 0,
 			});
 		},
-		//Update the positon so that the coins falls again
-
-
-		// update: function(oldDate) {
-		// 	let el = this.el;
-		// 	let floorEl = document.querySelector('#floor');
-
-		// 	let reset = {
-		// 		x: {type: 'number', default: Math.random() * 10 - 5},
-		// 		y: {type: 'number', default: Math.random() * 50 + 2},
-		// 		z: {type: 'number', default: Math.random() * -10}
-		// 	}
-			
-		// 	el.addEventListener('collide', function (e) {
-		// 		// console.log('Colided' + e.detail.body.id);				
-		// 		setTimeout(reset, 3000)
-		// 		e.detail.target.el;  // Original entity (playerEl).
-		// 	});
-		// },
-
-		// reset: function() {
-		// 	let el = this.el;
-		// 	let data = this.data;
-		// 	this.el.setAttribute('position', {
-		// 		x: rotation.x + data.rotSpeed,
-		// 		y: rotation.y + data.rotSpeed,
-		// 		z: rotation.z + data.rotSpeed,
-		// 	})
-		// },
 
 		animate: function() {
 			let data = this.data;
