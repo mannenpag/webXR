@@ -12,7 +12,9 @@
 			width: {type: 'number', default: 1},
 			height: {type: 'number', default: 1},
 			depth: {type: 'number', default: 1},
-			color: {type: 'color', default: '#AAA'}
+			color: {type: 'color', default: '#AAA',},
+			speed: {type: 'number', default: .01},
+			
 		},
 		init: function () {
 			let data = this.data;
@@ -22,7 +24,13 @@
 			this.material = new THREE.MeshStandardMaterial({color: data.color});
 			this.mesh = new THREE.Mesh(this.geometry, this.material);
 
-			console.log("Loaded");
+			el.addEventListener('mouseenter', function () {
+				el.setAttribute('test', {speed: .001});
+			});
+
+			el.addEventListener('mouseleave', function () {
+				el.setAttribute('test', {speed: .01});
+			});		
 		},
 
 		animate: function(speed) {
@@ -31,15 +39,17 @@
 
 			el.setObject3D('mesh', this.mesh);
 			el.object3D.rotation.set(
-			THREE.Math.degToRad(90 * speed),
-			THREE.Math.degToRad(15 * speed),
-			THREE.Math.degToRad(30 * speed)
+				THREE.Math.degToRad(90 * speed),
+				THREE.Math.degToRad(15 * speed),
+				THREE.Math.degToRad(30 * speed)
 			);
 			el.object3D.rotation.x += Math.PI;
 		},
 
 		tick: function(time, timeDelta) {
-			this.animate(.01 * time);
+			let data = this.data;
+
+			this.animate(data.speed * time);
 		}
 	})
 
@@ -47,11 +57,10 @@
 		schema: {
 			speed: {type: 'number', default: .1},
 		},
+
 		init: function () {
 			let data = this.data;
-			let el = this.el;	
-			console.log(data.speed);
-			console.log("Loaded");
+			let el = this.el;
 		},
 
 		animate: function(time) {
@@ -80,8 +89,8 @@
       <a-light type="point" color="#fffff" position="0 11.4577 -10.71189" angle="-60" light="color: #fffff2; angle: 60; intensity: 1.58; castShadow: true" scale="4.94 3.3 8.44"></a-light>
       <!-- <a-sphere position="0 10 -7"></a-sphere> -->
 	  <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      
-	  <a-camera position="0 1 5"></a-camera>
-      <a-entity position="0 0 -5" gltf-model="#fish" animation-component></a-entity>
+	  <a-camera position="0 1 5"><a-cursor></a-cursor></a-camera>
+      <a-entity position="0 0 -5" gltf-model="#fish" animation-component='speed: .1'></a-entity>
 	  <a-entity test="width: 1; height: 1; depth: 1; color: orange"
 	  position="0 5 -5"></a-entity>
 	  <a-sky src="#sky"></a-sky>
