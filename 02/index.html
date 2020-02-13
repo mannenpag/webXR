@@ -8,29 +8,62 @@
 	<script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.13.1/dist/aframe-extras.min.js"></script>
   </head>
   <script>
+
+	AFRAME.registerComponent('random-pos', {
+		schema: {
+			x: {type: 'number', default: Math.random() * 10 - 5},
+			y: {type: 'number', default: Math.random() * 50 + 2},
+			z: {type: 'number', default: Math.random() * -10}
+		},
+
+		init: function () {
+			
+		}
+	})
+
 	AFRAME.registerComponent('set-mass', {
 		schema: {
+			rotSpeed: {type: 'number', default: .01},
+			position: {x}
 		},
 
 		init: function () {
 			let el = this.el;
+			let floorEl = document.querySelector('#floor');
+
 			el.setAttribute('dynamic-body', {
-				shape: 'box',
+				shape: 'auto',
 				mass: 1.5,
 				linearDamping: 0,
 			});
-			el.addEventListener('physicscollided', function (event) {
-				console.log('Entity collided with', event.detail.collidingEntity);
-			});
+
 		},
+
+		update: function () {
+
+		},
+
 		animate: function(time) {
 			let data = this.data;
 			let el = this.el;
+			let connected = false;
+
+			el.addEventListener('collide', function (e) {
+				console.log('Colided' + e.detail.body.id);
+				connected = true;
+				e.detail.target.el;  // Original entity (playerEl).
+				e.detail.body.el;    // Other entity, which playerEl touched.
+				e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
+				e.detail.contact.ni; // Normal (direction) of the collision (CANNON.Vec3).
+
+				console.log(connected);
+			});
+
 			let rotation = this.el.object3D.rotation;
 			this.el.setAttribute('rotation', {
-				x: rotation.x + 0.01 * time,
-				y: rotation.y + 0.01 * time,
-				z: rotation.z + 0.01 * time,
+				x: rotation.x + data.rotSpeed * time,
+				y: rotation.y + data.rotSpeed * time,
+				z: rotation.z + data.rotSpeed * time,
 			})
 		},
 
@@ -54,9 +87,8 @@
 				gltf-model="#coin" 
 				set-mass
 				></a-entity>
-	  <a-entity test="width: 1; height: 1; depth: 1; color: orange"
-	  position="0 5 -5"></a-entity>
-	  <a-plane collidingEntity static-body position="0 0 0" rotation="-90 0 0" width="30" height="30" color="black" material="transparent: true; opacity: 0.2"></a-plane>
+	  <a-entity id="coin" test="width: 1; height: 1; depth: 1; color: orange"></a-entity>
+	  <a-plane id='floor' collidingEntity static-body position="0 0 0" rotation="-90 0 0" width="30" height="30" color="black" material="transparent: true; opacity: 0.2"></a-plane>
 	</a-scene>
   </body>
 </html>
