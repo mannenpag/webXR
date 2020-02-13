@@ -9,6 +9,12 @@
   </head>
   <script>
 
+	let randomNum = function () {
+		return Math.random() * 10 - 5;
+	}
+
+	console.log(randomNum());
+
 	AFRAME.registerComponent('random-pos', {
 		schema: {
 			x: {type: 'number', default: Math.random() * 10 - 5},
@@ -17,78 +23,80 @@
 		},
 
 		init: function () {
-			
+			let el = this.el;
+			let data = this.data;
+
+			el.setAttribute('position', {
+				x: this.data.x,
+				y: this.data.y,
+				z: this.data.z
+			})
 		}
 	})
 
 	AFRAME.registerComponent('set-mass', {
 		schema: {
-			rotSpeed: {type: 'number', default: .01},
-			position: {x}
+			rotSpeed: {type: 'number', default: .1},
 		},
 
 		init: function () {
 			let el = this.el;
 			let floorEl = document.querySelector('#floor');
-
 			el.setAttribute('dynamic-body', {
 				shape: 'auto',
-				mass: 1.5,
+				mass: 3.5,
 				linearDamping: 0,
 			});
-
-		},
-
-		update: function () {
-
-		},
-
-		animate: function(time) {
-			let data = this.data;
-			let el = this.el;
-			let connected = false;
-
 			el.addEventListener('collide', function (e) {
 				console.log('Colided' + e.detail.body.id);
-				connected = true;
+				
 				e.detail.target.el;  // Original entity (playerEl).
 				e.detail.body.el;    // Other entity, which playerEl touched.
 				e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
 				e.detail.contact.ni; // Normal (direction) of the collision (CANNON.Vec3).
 
-				console.log(connected);
 			});
+		},
+
+		animate: function() {
+			let data = this.data;
+			let el = this.el;
+			let connected = false;
 
 			let rotation = this.el.object3D.rotation;
 			this.el.setAttribute('rotation', {
-				x: rotation.x + data.rotSpeed * time,
-				y: rotation.y + data.rotSpeed * time,
-				z: rotation.z + data.rotSpeed * time,
+				x: rotation.x + data.rotSpeed,
+				y: rotation.y + data.rotSpeed,
+				z: rotation.z + data.rotSpeed,
 			})
 		},
 
 		tick: function(time, timeDelta) {
-			this.animate(time);
+			this.animate();
 		}
 	})
 </script>
   <body>
     <a-scene background="color: #fefefe">
       <a-assets>
-        <!-- http://www.seaview360.com/ -->
-        <a-asset-item id="coin" src="model/scene.gltf"></a-asset-item>
+       		<img id="ground" src="marble.jpg">
+		  	<a-asset-item id="coin" src="model/scene.gltf"></a-asset-item>
       </a-assets>
       <a-light type="point" color="#fffff" position="0 11.4577 -10.71189" angle="-60" light="color: #fffff2; angle: 60; intensity: 1.58; castShadow: true" scale="4.94 3.3 8.44"></a-light>
-      <!-- <a-sphere position="0 10 -7"></a-sphere> -->
 	  <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      
-	  <a-camera position="0 1 5"><a-cursor></a-cursor></a-camera>
-      <a-entity  
-				position="0 10 -5" 
-				gltf-model="#coin" 
-				set-mass
-				></a-entity>
-	  <a-entity id="coin" test="width: 1; height: 1; depth: 1; color: orange"></a-entity>
-	  <a-plane id='floor' collidingEntity static-body position="0 0 0" rotation="-90 0 0" width="30" height="30" color="black" material="transparent: true; opacity: 0.2"></a-plane>
+	  <a-camera position="0 10 5"><a-cursor></a-cursor></a-camera>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+	  <a-plane id='floor' collidingEntity static-body position="0 0 0" rotation="-90 0 0" width="30" height="30" src="#ground" ></a-plane>
 	</a-scene>
   </body>
 </html>
