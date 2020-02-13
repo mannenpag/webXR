@@ -48,8 +48,7 @@
 				linearDamping: 0,
 			});
 			el.addEventListener('collide', function (e) {
-				console.log('Colided' + e.detail.body.id);
-				
+				// console.log('Colided' + e.detail.body.id);				
 				e.detail.target.el;  // Original entity (playerEl).
 				e.detail.body.el;    // Other entity, which playerEl touched.
 				e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
@@ -85,6 +84,14 @@
       <a-light type="point" color="#fffff" position="0 11.4577 -10.71189" angle="-60" light="color: #fffff2; angle: 60; intensity: 1.58; castShadow: true" scale="4.94 3.3 8.44"></a-light>
 	  <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      
 	  <a-camera position="0 10 5"><a-cursor></a-cursor></a-camera>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
+		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
 		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
 		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
 		<a-entity gltf-model="#coin" set-mass random-pos></a-entity>
