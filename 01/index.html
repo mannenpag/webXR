@@ -7,43 +7,12 @@
     <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
   </head>
   <script>
-	// AFRAME.registerComponent('test', {
-	// 	schema: {
-	// 		width: {type: 'number', default: 1},
-	// 		height: {type: 'number', default: 1},
-	// 		depth: {type: 'number', default: 1},
-	// 		color: {type: 'color', default: '#AAA'}
-	// 	},
-	// 	init: function () {
-	// 		let data = this.data;
-	// 		let el = this.el;	
-
-	// 		this.geometry = new THREE.BoxBufferGeometry(data.width, data.height, data.depth);
-	// 		this.material = new THREE.MeshStandardMaterial({color: data.color});
-	// 		this.mesh = new THREE.Mesh(this.geometry, this.material);
-
-	// 		console.log("Loaded");
-	// 	},
-
-	// 	animate: function() {
-	// 		let data = this.data;
-	// 		let el = this.el;
-	// 		el.setObject3D('mesh', this.mesh);
-	// 		el.object3D.rotation.set(
-	// 		THREE.Math.degToRad(90),
-	// 		THREE.Math.degToRad(15),
-	// 		THREE.Math.degToRad(30)
-	// 		);
-	// 		el.object3D.rotation.x += Math.PI;
-	// 	},
-
-	// 	tick: function(time, timeDelta) {
-	// 		this.animate();
-	// 	}
-	// })
-	AFRAME.registerComponent('rotateAnimation', {
+	AFRAME.registerComponent('test', {
 		schema: {
-			type: '';
+			width: {type: 'number', default: 1},
+			height: {type: 'number', default: 1},
+			depth: {type: 'number', default: 1},
+			color: {type: 'color', default: '#AAA'}
 		},
 		init: function () {
 			let data = this.data;
@@ -56,20 +25,48 @@
 			console.log("Loaded");
 		},
 
-		animate: function() {
+		animate: function(speed) {
 			let data = this.data;
 			let el = this.el;
+
 			el.setObject3D('mesh', this.mesh);
 			el.object3D.rotation.set(
-			THREE.Math.degToRad(90),
-			THREE.Math.degToRad(15),
-			THREE.Math.degToRad(30)
+			THREE.Math.degToRad(90 * speed),
+			THREE.Math.degToRad(15 * speed),
+			THREE.Math.degToRad(30 * speed)
 			);
 			el.object3D.rotation.x += Math.PI;
 		},
 
 		tick: function(time, timeDelta) {
-			this.animate();
+			this.animate(.01 * time);
+		}
+	})
+
+	AFRAME.registerComponent('animation-component', {
+		schema: {
+			speed: {type: 'number', default: .1},
+		},
+		init: function () {
+			let data = this.data;
+			let el = this.el;	
+			console.log(data.speed);
+			console.log("Loaded");
+		},
+
+		animate: function(time) {
+			let data = this.data;
+			let el = this.el;
+			let rotation = this.el.object3D.rotation;
+			this.el.setAttribute('rotation', {
+				x: rotation.x + data.speed * time,
+				y: rotation.y + data.speed * time,
+				z: rotation.z + data.speed * time,
+			})
+		},
+
+		tick: function(time, timeDelta) {
+			this.animate(time);
 		}
 	})
 </script>
@@ -82,8 +79,9 @@
       </a-assets>
       <a-light type="point" color="#fffff" position="0 11.4577 -10.71189" angle="-60" light="color: #fffff2; angle: 60; intensity: 1.58; castShadow: true" scale="4.94 3.3 8.44"></a-light>
       <!-- <a-sphere position="0 10 -7"></a-sphere> -->
-      <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      <a-camera position="0 1 0"></a-camera>
-      <a-entity position="0 0 -5" gltf-model="#fish"></a-entity>
+	  <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>      
+	  <a-camera position="0 1 5"></a-camera>
+      <a-entity position="0 0 -5" gltf-model="#fish" animation-component></a-entity>
 	  <a-entity test="width: 1; height: 1; depth: 1; color: orange"
 	  position="0 5 -5"></a-entity>
 	  <a-sky src="#sky"></a-sky>
