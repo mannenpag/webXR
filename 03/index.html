@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Shaders and materials</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+	<script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.13.1/dist/aframe-extras.min.js"></script>
+    <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
+    <script>
+    </script>
+  </head>
+  <body>
+    <a-scene background="color: #fefefe">
+        <a-entity fog="true" shadow="receive: true" environment="preset: goaland; groundColor: #445; grid: cross"></a-entity>
+      <a-assets>
+      </a-assets>
+
+      <a-camera position="0 2 5"><a-cursor></a-cursor></a-camera>
+      <a-entity geometry="primitive: sphere" 
+            material="color: red; emissive: red; emissiveIntensity: 1;" 
+            scale=".5 .5 .5" 
+            light="type:point;
+                    castShadow:true;
+                    intensity:2.0;
+                    color:gray;
+                    distance:50;" 
+            position="4 4 -4"
+            light="type: point; intensity: 2.0; color: black;"></a-entity>
+      <a-entity 
+                radius="0.1"
+                shadow="cast: true"
+                position="0 2 0"
+                geometry="primitive: torus" 
+                material="color: #c64855" 
+                light="type: point; intensity: .2"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+                animation__color="property: material.color; type: color; to: blue; loop: true; dur: 500"
+                >
+    </a-scene>
+  </body>
+</html>
