@@ -1,37 +1,14 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>WebXr Midterm</title>
-    <meta name="description" content="Hello, WebVR! • A-Frame">
-    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>    
-    <script src="https://rawgit.com/msj121/aframeFrogShaders/master/aframe-shader-frog.js"></script>
-    <!-- Add some cool shaders to the background depending on what music is playing -->
-    <script src="components/sphere.js"></script>
-    <script src="components/ripple.js"></script>
-  </head>
-  <body>
-    <a-scene background="color: #161717">
-      <a-assets>
-        <audio id="404" crossorigin="anonymous" preload="auto" src="assets/sound/404b.wav"></audio>
-        <audio id="hi-hat" crossorigin="anonymous" preload="auto" src="assets/sound/hi-hat.ogg"></audio>
-        <audio id="808bd" crossorigin="anonymous" preload="auto" src="assets/sound/808bd.wav"></audio>
-        <audio id="808" crossorigin="anonymous" preload="auto" src="assets/sound/808.wav"></audio>
 
-      </a-assets>
-      <a-camera position="0 1 5"><a-cursor></a-cursor></a-camera> 
-      <a-light type="point" color="#fffff" position="0 11.4577 23.38268" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.56; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>   
+<body>
 
-      <!-- <a-sound set-sound src="#404" autoplay="true" loop="true" positional="false"></a-sound>    -->
-      <!-- <a-sound set-sound src="#hi-hat" autoplay="false" loop="true" positional="false"></a-sound>   
-      <a-sound set-sound src="#808" autoplay="false" loop="true" positional="false"></a-sound>   
-      <a-sound set-sound src="#808bd" autoplay="false" loop="true" positional="false"></a-sound>    -->
-      <a-entity position='0,2,1'>
-        <a-sphere class="sphere" sphere-properties="">
-        <a-entity ripple></a-entity>
-      </a-entity>
+    <div id="start" style="text-align:center; font-size: xx-large">
+        <div>
+            <a href="play.html">Start!</a>
+        </div>
+    </div>
 
-	    <!-- <a-sky src=""></a-sky> -->
-    </a-scene>
-  </body>
+</body>
+
 </html>

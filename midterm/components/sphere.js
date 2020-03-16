@@ -28,7 +28,7 @@ AFRAME.registerComponent('sphere-properties', {
             if (!active) {
                 el.setAttribute('segments-height', 32);
                 el.setAttribute('segments-width', 32);
-                el.setAttribute('color', '#f6da86');
+                el.setAttribute('color', '#dacca1');
                 console.log("Active");
 
                 el.setAttribute('animation', {
@@ -36,11 +36,13 @@ AFRAME.registerComponent('sphere-properties', {
                     to: '1.1',
                     loop: 'true',
                     elasticity: '400',
-                    easing: 'easeInSine',
-                    dur: '400',
+                    easing: 'easeInQuad',
+                    dur: '300',
                 });
+
             }
             if (active) {
+                el.setAttribute('radius', 1);
                 el.setAttribute('segments-height', data.widthSegments);
                 el.setAttribute('segments-width', data.heightSegments);
                 el.setAttribute('color', data.color);

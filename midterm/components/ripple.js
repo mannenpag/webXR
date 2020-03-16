@@ -24,7 +24,6 @@ AFRAME.registerComponent('ripple', {
                 color: data.color
             })
             el.appendChild(circle);
-
         }
     }
 })
