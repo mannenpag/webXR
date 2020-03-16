@@ -24,7 +24,7 @@ AFRAME.registerComponent('sphere-properties', {
         el.setAttribute('segments-width', data.heightSegments);
         el.setAttribute('color', data.color);
 
-        el.addEventListener('click', function () {
+        el.addEventListener('click', () => {
             if (!active) {
                 el.setAttribute('segments-height', 32);
                 el.setAttribute('segments-width', 32);
