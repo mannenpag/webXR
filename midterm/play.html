@@ -29,43 +29,70 @@
 
         <audio id="slutty808" crossorigin="anonymous" preload="auto" src="assets/sound/slutty-808.wav" loop="true"></audio>
 
-        <audio id="kick" crossorigin="anonymous" preload="auto" src="assets/sound/kick-04.wav" loop="true"></audio>
+        <audio id="e-130" crossorigin="anonymous" preload="auto" src="assets/sound/loop-e-130.wav" loop="true"></audio>
 
+        <audio id="shimmer" crossorigin="anonymous" preload="auto" src="assets/sound/shimmer.wav" loop="true"></audio>        
+        
+        <audio id="f-minor" crossorigin="anonymous" preload="auto" src="assets/sound/synth-f-minor.wav" loop="true"></audio>
+
+        <audio id="loop" crossorigin="anonymous" preload="auto" src="assets/sound/loop.mp3" loop="true"></audio>
       </a-assets>
       <a-camera position="0 1 0"><a-cursor></a-cursor></a-camera> 
       
       <a-light type="point" color="#fffff" position="0 11.4577 0" angle="-60" light="color: #fffff2; angle: 60; intensity: 0.78; castShadow: true; decay: -2.55" scale="4.94 3.3 8.44"></a-light>  
 
       <a-entity position='4 0 -5'>
+        <a-text rotation="0 -30 0" position="-1.5 1.5 1" value="808 Reverse"></a-text>
         <a-sphere class="sphere" sphere-properties="soundDur: 2000" audiohandler="src: 808reverse">
         <a-entity ripple></a-entity>
       </a-entity>
 
       <a-entity position='-4 0 -5'>
+        <a-text rotation="0 30 0" position="0 1.5 1" value="Distorted Voice"></a-text>
         <a-sphere class="sphere" sphere-properties="soundDur: 5184" audiohandler="src: transition">
         <a-entity ripple></a-entity>
       </a-entity>
 
       <a-entity position='0 0 -7'>
+        <a-text rotation="0 0 0" position="-.5 1.5 1" value="Hi Hat"></a-text>
         <a-sphere class="sphere" sphere-properties="soundDur: 450" audiohandler="src: hihat">
         <a-entity ripple></a-entity>
       </a-entity>
 
-      <a-entity position='6 0 -1'>
+      <a-entity position='6 0 0'>
+        <a-text rotation="0 -90 0" position="0 1.5 -.5" value="Slutty 808"></a-text>
         <a-sphere class="sphere" sphere-properties="soundDur: 1656" audiohandler="src: slutty808">
         <a-entity ripple></a-entity>
       </a-entity>
 
-      <a-entity position='-6 0 -1'>
-        <a-sphere class="sphere" sphere-properties="soundDur: 2016" audiohandler="src: kick">
+      <a-entity position='-6 0 0'>
+        <a-text rotation="0 90 0" position="0 1.5 .2" value="E - 140"></a-text>
+        <a-sphere class="sphere" sphere-properties="soundDur: 7440" audiohandler="src: e-130">
+        <a-entity ripple></a-entity>
+      </a-entity>
+
+      <a-entity position='4 0 5'>
+        <a-text rotation="0 -120 0" position="0 1.5 -.5" value="Synth"></a-text>
+        <a-sphere class="sphere" sphere-properties="soundDur: 3360" audiohandler="src: f-minor">
+        <a-entity ripple></a-entity>
+      </a-entity>
+
+      <a-entity position='-4 0 5'>
+        <a-text rotation="0 120 0" position="-.5 1.5 1" value="Loop"></a-text>
+        <a-sphere class="sphere" sphere-properties="soundDur: 2016" audiohandler="src: loop">
+        <a-entity ripple></a-entity>
+      </a-entity>
+
+      <a-entity position='0 0 7'>
+        <a-text rotation="0 180 0" position="0.2 1.5 1" value="Shime"></a-text>
+        <a-sphere class="sphere" sphere-properties="soundDur: 3456" audiohandler="src: shimmer">
         <a-entity ripple></a-entity>
       </a-entity>
 
       <a-plane id='floor' position="0 -1.1 0" rotation="-90 0 0" width="40" height="40" material='color: #161717' ></a-plane>
 
       <a-gradient-sky material="topColor:0 1 0; bottomColor:1 0 0;"></a-gradient-sky>
-      
-      <a-sky color="#6EBAA7"></a-sky>
+
 
     </a-scene>
   </body>
