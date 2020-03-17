@@ -1,9 +1,10 @@
 AFRAME.registerComponent('sphere-properties', {
     schema: {
-        radius: {type: 'number', default: 1},
+        radius: {type: 'number', default: .8},
         widthSegments: {type: 'number', default: 1},
         heightSegments: {type: 'number', default: 1},
         color: {type: 'color', default: '#FAFAFA'},
+        soundDur: {type: 'number', default: 300},
         x: {type: 'number', default: 0},
         y: {type: 'number', default: 0},
         z: {type: 'number', default: 0}
@@ -33,11 +34,11 @@ AFRAME.registerComponent('sphere-properties', {
 
                 el.setAttribute('animation', {
                     property: 'radius',
-                    to: '1.1',
+                    to: '1.2',
                     loop: 'true',
                     elasticity: '400',
                     easing: 'easeInQuad',
-                    dur: '300',
+                    dur: data.soundDur,
                 });
 
             }

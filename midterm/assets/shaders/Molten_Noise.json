@@ -1,0 +1,96 @@
+{
+  "id": 292,
+  "name": "Molten Noise",
+  "fragment": "precision highp float;\nprecision highp int;\n\n// (sqrt(5) - 1)/4 = F4, used once below\n#define F4 0.309016994374947451\n#define PI 3.14159\n\nuniform float time;\nuniform float permutations;\nuniform float iterations;\nuniform vec2 uvScale;\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec3 color3;\nuniform float brightness;\nuniform float speed;\n\nvarying vec2 vUv;\n\n// Description : Array and textureless GLSL 2D/3D/4D simplex\n//               noise functions.\n//      Author : Ian McEwan, Ashima Arts.\n//  Maintainer : ijm\n//     Lastmod : 20110822 (ijm)\n//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.\n//               Distributed under the MIT License. See LICENSE file.\n//               https://github.com/ashima/webgl-noise\n//\n\nvec4 mod289(vec4 x) {\n    return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nfloat mod289(float x) {\n    return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 permute(vec4 x) {\n    return mod289(((x*34.0)+1.0)*x);\n}\n\nfloat permute(float x) {\n    return mod289(((x*34.0)+1.0)*x);\n}\n\nvec4 taylorInvSqrt(vec4 r) {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nfloat taylorInvSqrt(float r) {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nvec4 grad4(float j, vec4 ip) {\n    const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);\n    vec4 p,s;\n\n    p.xyz = floor( fract (vec3(j) * ip.xyz) * 7.0) * ip.z - 1.0;\n    p.w = 1.5 - dot(abs(p.xyz), ones.xyz);\n    s = vec4(lessThan(p, vec4(0.0)));\n    p.xyz = p.xyz + (s.xyz*2.0 - 1.0) * s.www;\n\n    return p;\n}\n\nfloat snoise(vec4 v) {\n    const vec4  C = vec4( 0.138196601125011,  // (5 - sqrt(5))/20  G4\n            0.276393202250021,  // 2 * G4\n            0.414589803375032,  // 3 * G4\n            -0.447213595499958); // -1 + 4 * G4\n\n    // First corner\n    vec4 i  = floor(v + dot(v, vec4(F4)) );\n    vec4 x0 = v -   i + dot(i, C.xxxx);\n\n    // Other corners\n\n    // Rank sorting originally contributed by Bill Licea-Kane, AMD (formerly ATI)\n    vec4 i0;\n    vec3 isX = step( x0.yzw, x0.xxx );\n    vec3 isYZ = step( x0.zww, x0.yyz );\n    //  i0.x = dot( isX, vec3( 1.0 ) );\n    i0.x = isX.x + isX.y + isX.z;\n    i0.yzw = 1.0 - isX;\n    //  i0.y += dot( isYZ.xy, vec2( 1.0 ) );\n    i0.y += isYZ.x + isYZ.y;\n    i0.zw += 1.0 - isYZ.xy;\n    i0.z += isYZ.z;\n    i0.w += 1.0 - isYZ.z;\n\n    // i0 now contains the unique values 0,1,2,3 in each channel\n    vec4 i3 = clamp( i0, 0.0, 1.0 );\n    vec4 i2 = clamp( i0-1.0, 0.0, 1.0 );\n    vec4 i1 = clamp( i0-2.0, 0.0, 1.0 );\n\n    //  x0 = x0 - 0.0 + 0.0 * C.xxxx\n    //  x1 = x0 - i1  + 1.0 * C.xxxx\n    //  x2 = x0 - i2  + 2.0 * C.xxxx\n    //  x3 = x0 - i3  + 3.0 * C.xxxx\n    //  x4 = x0 - 1.0 + 4.0 * C.xxxx\n    vec4 x1 = x0 - i1 + C.xxxx;\n    vec4 x2 = x0 - i2 + C.yyyy;\n    vec4 x3 = x0 - i3 + C.zzzz;\n    vec4 x4 = x0 + C.wwww;\n\n    // Permutations\n    i = mod289(i);\n    float j0 = permute( permute( permute( permute(i.w) + i.z) + i.y) + i.x);\n    vec4 j1 = permute( permute( permute( permute (\n                        i.w + vec4(i1.w, i2.w, i3.w, 1.0 ))\n                    + i.z + vec4(i1.z, i2.z, i3.z, 1.0 ))\n                + i.y + vec4(i1.y, i2.y, i3.y, 1.0 ))\n            + i.x + vec4(i1.x, i2.x, i3.x, 1.0 ));\n\n    // Gradients: 7x7x6 points over a cube, mapped onto a 4-cross polytope\n    // 7*7*6 = 294, which is close to the ring size 17*17 = 289.\n    vec4 ip = vec4(1.0/294.0, 1.0/49.0, 1.0/7.0, 0.0) ;\n\n    vec4 p0 = grad4(j0,   ip);\n    vec4 p1 = grad4(j1.x, ip);\n    vec4 p2 = grad4(j1.y, ip);\n    vec4 p3 = grad4(j1.z, ip);\n    vec4 p4 = grad4(j1.w, ip);\n\n    // Normalise gradients\n    vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));\n    p0 *= norm.x;\n    p1 *= norm.y;\n    p2 *= norm.z;\n    p3 *= norm.w;\n    p4 *= taylorInvSqrt(dot(p4,p4));\n\n    // Mix contributions from the five corners\n    vec3 m0 = max(0.6 - vec3(dot(x0,x0), dot(x1,x1), dot(x2,x2)), 0.0);\n    vec2 m1 = max(0.6 - vec2(dot(x3,x3), dot(x4,x4)            ), 0.0);\n    m0 = m0 * m0;\n    m1 = m1 * m1;\n    return (\n        49.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))\n            + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) )\n    );\n\n}\n\n// makes a pseudorandom number between 0 and 1\nfloat hash(float n) {\n    return fract(sin(n)*93942.234);\n}\n\n// rotation matrix\nmat2 m = mat2(0.6,0.8,-0.8,0.6);\n\n// fractional brownian motion (i.e. photoshop clouds)\nfloat fbm(vec4 p) {\n    float f = 0.0;\n    f += 0.5 * snoise(vec4( p.xy * m, p.zw * m ));\n    p *= 2.02;\n    f += 0.25 * snoise(vec4( p.xy * m, p.zw * m ));\n    p *= 2.01;\n    f += 0.125 * snoise(vec4( p.xy * m, p.zw * m ));\n    p *= 2.03;\n    f += 0.0625 * snoise(vec4( p.xy * m, p.zw * m ));\n    f /= 0.9375;\n    return f;\n}\n\nvoid main() {\n    // relative coordinates\n    vec2 p = vUv * uvScale;\n    float elapsed = time * speed * 0.01;\n\n    float s = vUv.x * uvScale.x;\n    float t = vUv.y * uvScale.y;\n\n    // Tiling 4d noise based on\n    // https://gamedev.stackexchange.com/questions/23625/how-do-you-generate-tileable-perlin-noise/23639#23639\n    float multiplier = iterations / ( 2.0 * PI );\n    float nx = cos( s * 2.0 * PI ) * multiplier;\n    float ny = cos( t * 2.0 * PI ) * multiplier;\n    float nz = sin( s * 2.0 * PI ) * multiplier;\n    float nw = sin( t * 2.0 * PI ) * multiplier;\n\n    vec4 tile4d = vec4( nx, ny, nz, nw );\n\n    vec2 a = vec2(\n        fbm( tile4d + elapsed * 1.1 ),\n        fbm( tile4d - elapsed * 1.3 )\n    );\n\n    vec2 b = vec2(\n        fbm( tile4d + elapsed * 1.2 + a.x * 2.0 ),\n        fbm( tile4d - elapsed * 1.2 + a.x * 3.0 )\n    );\n\n    float surf = fbm( tile4d + elapsed + length( b ) * permutations );\n\n    // mix in some color\n    vec3 colorOutput = brightness * (\n        ( ( b.x + surf ) * color1 ) +\n        ( ( b.y + surf ) * color2 ) +\n        ( ( surf + b.x ) * color3 )\n    );\n\n    gl_FragColor = vec4( colorOutput, 1.);\n}",
+  "vertex": "/**\n* Example Vertex Shader\n* Sets the position of the vertex by setting gl_Position\n*/\n\n// Set the precision for data types used in this shader\nprecision highp float;\nprecision highp int;\n\n// Default THREE.js uniforms available to both fragment and vertex shader\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\n\n// Default uniforms provided by ShaderFrog.\nuniform vec3 cameraPosition;\nuniform float time;\n\n// Default attributes provided by THREE.js. Attributes are only available in the\n// vertex shader. You can pass them to the fragment shader using varyings\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nattribute vec2 uv2;\n\n// Examples of variables passed from vertex to fragment shader\nvarying vec3 vPosition;\nvarying vec3 vNormal;\nvarying vec2 vUv;\nvarying vec2 vUv2;\n\nvoid main() {\n\n    // To pass variables to the fragment shader, you assign them here in the\n    // main function. Traditionally you name the varying with vAttributeName\n    vNormal = normal;\n    vUv = uv;\n    vUv2 = uv2;\n    vPosition = position;\n\n    // This sets the position of the vertex in 3d space. The correct math is\n    // provided below to take into account camera and object data.\n    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n}",
+  "uniforms": {
+    "cameraPosition": {
+      "name": "cameraPosition",
+      "type": "v3",
+      "glslType": "vec3",
+      "description": ""
+    },
+    "time": {
+      "name": "time",
+      "type": "f",
+      "glslType": "float",
+      "description": ""
+    },
+    "uvScale": {
+      "name": "uvScale",
+      "type": "v2",
+      "glslType": "vec2",
+      "value": {
+        "x": "1",
+        "y": "1"
+      },
+      "description": ""
+    },
+    "speed": {
+      "name": "speed",
+      "type": "f",
+      "glslType": "float",
+      "value": "0.2",
+      "description": ""
+    },
+    "color1": {
+      "name": null,
+      "type": "c",
+      "glslType": "vec3",
+      "value": {
+        "r": 0.7098039215686275,
+        "g": 0.3137254901960784,
+        "b": 0.8117647058823529
+      },
+      "description": ""
+    },
+    "color2": {
+      "name": null,
+      "type": "c",
+      "glslType": "vec3",
+      "value": {
+        "r": 0.12941176470588237,
+        "g": 0.24313725490196078,
+        "b": 0.9803921568627451
+      },
+      "description": ""
+    },
+    "color3": {
+      "name": null,
+      "type": "c",
+      "glslType": "vec3",
+      "value": {
+        "r": 0.8980392156862745,
+        "g": 0.3568627450980392,
+        "b": 0.8
+      },
+      "description": ""
+    },
+    "brightness": {
+      "name": null,
+      "type": "f",
+      "glslType": "float",
+      "value": "1",
+      "description": ""
+    },
+    "permutations": {
+      "name": null,
+      "type": "f",
+      "glslType": "float",
+      "value": "10",
+      "description": ""
+    },
+    "iterations": {
+      "name": null,
+      "type": "f",
+      "glslType": "float",
+      "value": "1",
+      "description": ""
+    }
+  },
+  "url": "http://shaderfrog.com/app/view/292",
+  "user": {
+    "username": "andrewray",
+    "url": "http://shaderfrog.com/app/profile/andrewray"
+  }
+}
