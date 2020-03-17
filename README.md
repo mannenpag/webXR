@@ -8,6 +8,8 @@
 
 [03](https://mannenpag.github.io/webXR/03)
 
+[Midterm](https://mannenpag.github.io/webXR/midterm)
+
 
 2020 Gustav Bodin
 
